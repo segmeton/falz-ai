@@ -79,9 +79,15 @@ public class SegmetonAI implements AIInterface {
 		
 		spSkill = Action.STAND_D_DF_FC;
 		
-		actionAirOff = new Action[] {};
+		actionAirOff = new Action[] { Action.AIR_GUARD, Action.AIR_A, Action.AIR_B, Action.AIR_DB,
+				Action.AIR_FA, Action.AIR_FB, Action.AIR_UA, Action.AIR_UB, Action.AIR_D_DF_FB,
+				Action.AIR_F_D_DFB, Action.AIR_D_DB_BB };
 		
-		actionGroundOff = new Action[] {};
+		actionGroundOff = new Action[] { Action.STAND_D_DB_BA, Action.BACK_STEP, Action.FORWARD_WALK, Action.DASH,
+				Action.JUMP, Action.FOR_JUMP, Action.BACK_JUMP, Action.STAND_GUARD, Action.CROUCH_GUARD, 
+				Action.THROW_B, Action.STAND_A, Action.STAND_B, Action.CROUCH_A, Action.CROUCH_B, Action.STAND_FA,
+				Action.STAND_FB, Action.CROUCH_FA, Action.STAND_D_DF_FB,
+				Action.STAND_F_D_DFA, Action.STAND_F_D_DFB, Action.STAND_D_DB_BB };
 		
 		actionAirDef = new Action[] { Action.AIR_GUARD, Action.AIR_D_DF_FA, Action.AIR_D_DF_FB, Action.AIR_F_D_DFB};
 		
@@ -161,8 +167,14 @@ public class SegmetonAI implements AIInterface {
 		
 		int rand = rng.nextInt(10000); 
 		
+		if (SegmetonAI.DEBUG_MODE) {
+	        System.out.println("RAND:" + rand );
+	    }
+		
 		if(Math.abs(hpDiff) > 30){
-			if(hpDiff > 0) {
+			
+			if(playerHp > opponentHp) {
+				
 				//aggressive
 				if(opponent.getState() == State.AIR) {
 					airOffensive(energy);
@@ -178,9 +190,10 @@ public class SegmetonAI implements AIInterface {
 						//defensive
 						airDefensive(energy);
 					} else {
-						airMove(energy);
+						airOffensive(energy);
 					}
 				}else {
+					
 					spSkill(energy);
 					
 					if(rand > 4000) {
@@ -188,35 +201,51 @@ public class SegmetonAI implements AIInterface {
 						groundDefensive(energy);
 					} else {
 						//offensive
-						groundMove(energy);
+						groundOffensive(energy);
 					}
 				}
 			}
+			
 		}
 		else {
 			//normal
 			if(opponent.getState() == State.AIR) {
-				if(rand > 8000) {
+//				if(rand > 8000) {
+//					//defensive
+//					airDefensive(energy);
+//				} else if (rand > 5000){
+//					//offensive
+//					airOffensive(energy);
+//				} else {
+//					airMove(energy);
+//				}
+				
+				if(rand>7000) {
 					//defensive
 					airDefensive(energy);
-				} else if (rand > 5000){
-					//offensive
-					airOffensive(energy);
 				} else {
-					airMove(energy);
+					airOffensive(energy);
 				}
 			}else {
 				
 				spSkill(energy);
 				
-				if(rand > 8000) {
+//				if(rand > 8000) {
+//					//defensive
+//					groundDefensive(energy);
+//				} else if (rand > 5000){
+//					//offensive
+//					groundOffensive(energy);
+//				} else {
+//					groundMove(energy);
+//				}
+				
+				if(rand>7000) {
 					//defensive
 					groundDefensive(energy);
-				} else if (rand > 5000){
+				} else {
 					//offensive
 					groundOffensive(energy);
-				} else {
-					groundMove(energy);
 				}
 				
 			}
@@ -259,6 +288,9 @@ public class SegmetonAI implements AIInterface {
 	}
 	
 	private void airDefensive(int energy) {
+		if (SegmetonAI.DEBUG_MODE) {
+	        System.out.println("Go Defensive");
+	    }
 		for (int i = 0; i < actionAirDef.length; i++) {
 			if (Math.abs(playerMotion.get(Action.valueOf(actionAirDef[i].name()).ordinal())
 					.getAttackStartAddEnergy()) <= energy) {
@@ -268,6 +300,10 @@ public class SegmetonAI implements AIInterface {
 	}
 	
 	private void airOffensive(int energy) {
+		if (SegmetonAI.DEBUG_MODE) {
+	        System.out.println("Go Offensive");
+	    }
+		
 		for (int i = 0; i < actionAirOff.length; i++) {
 			if (Math.abs(playerMotion.get(Action.valueOf(actionAirOff[i].name()).ordinal())
 					.getAttackStartAddEnergy()) <= energy) {
@@ -277,6 +313,10 @@ public class SegmetonAI implements AIInterface {
 	}
 	
 	private void groundDefensive(int energy) {
+		if (SegmetonAI.DEBUG_MODE) {
+	        System.out.println("Go Defensive");
+	    }
+		
 		for (int i = 0; i < actionGroundDef.length; i++) {
 			if (Math.abs(playerMotion.get(Action.valueOf(actionGroundDef[i].name()).ordinal())
 					.getAttackStartAddEnergy()) <= energy) {
@@ -286,6 +326,10 @@ public class SegmetonAI implements AIInterface {
 	}
 	
 	private void groundOffensive(int energy) {
+		if (SegmetonAI.DEBUG_MODE) {
+	        System.out.println("Go Offensive");
+	    }
+		
 		for (int i = 0; i < actionGroundOff.length; i++) {
 			if (Math.abs(playerMotion.get(Action.valueOf(actionGroundOff[i].name()).ordinal())
 					.getAttackStartAddEnergy()) <= energy) {
