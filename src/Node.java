@@ -258,7 +258,7 @@ public class Node {
 
     for (int i = 0; i < children.length; i++) {
 
-      if (SegmetonAI.DEBUG_MODE) {
+      if (FalzAI.DEBUG_MODE) {
         System.out.println("隧穂ｾ｡蛟､:" + children[i].score / children[i].games + ",隧ｦ陦悟屓謨ｰ:"
             + children[i].games + ",ucb:" + children[i].ucb + ",Action:" + myActions.get(i));
       }
@@ -269,7 +269,7 @@ public class Node {
       }
     }
 
-    if (SegmetonAI.DEBUG_MODE) {
+    if (FalzAI.DEBUG_MODE) {
       System.out.println(myActions.get(selected) + ",蜈ｨ隧ｦ陦悟屓謨ｰ:" + games);
       System.out.println("");
     }
